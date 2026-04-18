@@ -1,12 +1,4 @@
-# Research Project: Load Balancing Strategies in Microservices Architecture
-
-## Research Novelty
-
-**Performance Comparison** - Comprehensive multi-strategy analysis  
-**Fault Tolerance Focus** - Service failure recovery evaluation (KEY NOVELTY!)  
-**Real Experimental Data** - Docker-based microservices setup  
-**Statistical Validation** - Multiple test runs (3 runs per scenario) for reliability  
-**Practical Implementation** - Industry-relevant scenarios  
+## Research Project: Load Balancing Strategies in Microservices Architecture
 
 ---
 
