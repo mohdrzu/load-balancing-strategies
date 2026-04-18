@@ -1,0 +1,50 @@
+# Artillery Load Test Configuration: Low Load
+# Scenario: 100 concurrent users, 1000 total requests
+
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 20
+      name: "Sustained low load"
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool down"
+  processor: "./custom-functions.js"
+  
+scenarios:
+  - name: "Get Products List"
+    weight: 70
+    flow:
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$.serviceId"
+              as: "serviceId"
+            - json: "$.processingTime"
+              as: "processingTime"
+      - think: 1
+  
+  - name: "Get Product by ID"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/products/{{ $randomNumber(1, 5) }}"
+          capture:
+            - json: "$.serviceId"
+              as: "serviceId"
+      - think: 1
+  
+  - name: "Get Products by Category"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/products/category/Electronics"
+          capture:
+            - json: "$.serviceId"
+              as: "serviceId"
+      - think: 1
+

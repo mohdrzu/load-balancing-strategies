@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Microservice Instance 1
+  service1:
+    build: ./microservice
+    container_name: product-service-1-lc
+    environment:
+      - SERVICE_ID=service-1
+      - SERVICE_NAME=Product Service 1
+      - PORT=3000
+    networks:
+      - app-network-lc
+    restart: unless-stopped
+
+  # Microservice Instance 2
+  service2:
+    build: ./microservice
+    container_name: product-service-2-lc
+    environment:
+      - SERVICE_ID=service-2
+      - SERVICE_NAME=Product Service 2
+      - PORT=3000
+    networks:
+      - app-network-lc
+    restart: unless-stopped
+
+  # Microservice Instance 3
+  service3:
+    build: ./microservice
+    container_name: product-service-3-lc
+    environment:
+      - SERVICE_ID=service-3
+      - SERVICE_NAME=Product Service 3
+      - PORT=3000
+    networks:
+      - app-network-lc
+    restart: unless-stopped
+
+  # Microservice Instance 4
+  service4:
+    build: ./microservice
+    container_name: product-service-4-lc
+    environment:
+      - SERVICE_ID=service-4
+      - SERVICE_NAME=Product Service 4
+      - PORT=3000
+    networks:
+      - app-network-lc
+    restart: unless-stopped
+
+  # NGINX Load Balancer (Least Connections)
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-load-balancer-lc
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/least-conn.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - service1
+      - service2
+      - service3
+      - service4
+    networks:
+      - app-network-lc
+    restart: unless-stopped
+
+networks:
+  app-network-lc:
+    driver: bridge
+

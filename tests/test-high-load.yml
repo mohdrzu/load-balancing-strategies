@@ -1,0 +1,41 @@
+# Artillery Load Test Configuration: High Load
+# Scenario: 1000 concurrent users, 10000 total requests
+
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      name: "Warm up"
+    - duration: 240
+      arrivalRate: 100
+      name: "Sustained high load"
+    - duration: 60
+      arrivalRate: 50
+      name: "Cool down"
+  
+scenarios:
+  - name: "Get Products List"
+    weight: 70
+    flow:
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$.serviceId"
+              as: "serviceId"
+      - think: 0.5
+  
+  - name: "Get Product by ID"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/products/{{ $randomNumber(1, 5) }}"
+      - think: 0.5
+  
+  - name: "Get Products by Category"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/products/category/Electronics"
+      - think: 0.5
+
